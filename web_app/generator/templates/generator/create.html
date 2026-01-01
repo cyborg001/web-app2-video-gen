@@ -167,8 +167,10 @@
             // Listen for typing
             document.getElementById('script-editor').addEventListener('input', updateAnalytics);
 
-            // Initial run
-            window.onload = updateAnalytics;
+            // Initial run - use setTimeout to ensure DOM is fully loaded with content
+            window.addEventListener('load', function () {
+                setTimeout(updateAnalytics, 100);
+            });
         </script>
 
         <button type="submit" class="btn">Generar Video</button>
