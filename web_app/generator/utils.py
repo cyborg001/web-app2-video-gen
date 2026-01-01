@@ -57,10 +57,7 @@ Responde ÚNICAMENTE el JSON.
     payload = {
         "contents": [{
             "parts": [{"text": prompt}]
-        }],
-        "generationConfig": {
-            "response_mime_type": "application/json"
-        }
+        }]
     }
 
     try:
@@ -68,8 +65,17 @@ Responde ÚNICAMENTE el JSON.
         if response.status_code == 200:
             result = response.json()
             content = result['candidates'][0]['content']['parts'][0]['text']
+            # Extract JSON from markdown code blocks if present
+            import re
+            json_match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
+            if json_match:
+                content = json_match.group(1)
+            elif '```' in content:
+                # Remove any code fences
+                content = re.sub(r'```\w*\n?', '', content)
+            
             import json
-            data = json.loads(content)
+            data = json.loads(content.strip())
             return data.get('script'), data.get('prompts'), data.get('music_suggestion')
         else:
             human_msg = "No se pudo conectar con la IA. Por favor, asegúrate de que tu 'GEMINI_API_KEY' en el archivo '.env' sea válida y que tengas saldo en tu cuenta de Google AI Studio."

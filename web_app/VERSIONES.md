@@ -23,6 +23,7 @@ Este archivo registra la evolución técnica, nuevas funcionalidades y correccio
 | 2.9.8 | 2026-01-01 | **Human-Centric Gemini Fix** | Migración al endpoint estable `v1` y modelo `gemini-1.5-flash-latest`. Implementación de mensajes de error "humanizados". |
 | 2.9.9 | 2026-01-01 | **Actionable Error System** | Refinamiento de mensajes de error de IA para guiar al usuario en la resolución de problemas (API Keys, conexión, config). |
 | 2.10.0 | 2026-01-01 | **Gemini 2.5 Flash Upgrade** | Migración al modelo `gemini-2.5-flash` (2026) tras diagnóstico exhaustivo de la API. Corrección definitiva del error 404. |
+| 2.10.1 | 2026-01-01 | **Gemini 2.5 Compatibility Fix** | Eliminación de `response_mime_type` no soportado. Parsing robusto de JSON desde respuestas de texto de Gemini 2.5. |
 
 ---
 *Actualizado al 01-01-2026*
