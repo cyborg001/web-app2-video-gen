@@ -20,20 +20,23 @@ def generate_script_ai(news_item):
         return None, "Error: No se encontró GEMINI_API_KEY en las variables de entorno.", None
 
     prompt = f"""
-Eres un guionista experto en YouTube Shorts de tecnología y ciencias para el canal "Noticias de IA y ciencias".
-Tu objetivo es transformar la noticia adjunta en un guion de alto impacto de máximo 2 minutos y medio.
+Eres un director y guionista experto en YouTube Shorts para el canal "Noticias de IA y ciencias".
+Tu objetivo es transformar la noticia adjunta en un guion CINEMATOGRÁFICO de alto impacto (máx 2.5 min).
 
-REGLAS CRÍTICAS DE FORMATO:
-1. El guion debe estar compuesto por líneas con el formato exacto: TITULO | nombre_archivo.png | Texto a locutar
+REGLAS CRÍTICAS DE FORMATO (PRO):
+1. El guion debe usar exactamente 4 columnas: TITULO | IMAGEN | DIRECCION | TEXTO
 2. El separador debe ser " | " (tubo con espacios).
-3. NO uses tablas de Markdown, ni negritas (**), ni corchetes [], ni llaves {{}} en el texto.
-4. Las imágenes deben tener nombres descriptivos como 'robot_ia.png' o 'laboratorio_ciencia.mp4'.
+3. Columna DIRECCION: Usa 'DER', 'IZQ', 'ABA', 'ARR' para efecto Ken Burns, o déjalo vacío para imagen estática. Sé creativo con el movimiento.
+4. Columna TEXTO: 
+   - NO uses tablas, negritas, corchetes o llaves (excepto la etiqueta de pausa).
+   - Inserte pausas estratégicas usando [PAUSA:X] (ej: [PAUSA:2.0]) en líneas dedicadas para crear silencios de producción y subir la música.
+5. Las imágenes deben tener nombres descriptivos técnicos (ej: 'nanobots_medicina.png').
 
 ESTRATEGIA DE CONTENIDO (HOOK-FIRST):
-- Comienzo (0-2s): Empieza SIEMPRE con: "Bienvenidos a Noticias de IA y ciencias. Según informes de {news_item.source.name}, [DATO IMPACTANTE DIRECTO SIN RELLENO]".
-- Ritmo: Cambia de imagen/escena cada 2-4 segundos (aproximadamente cada 8-12 palabras).
-- Conclusión Profunda: Incluye al menos una línea con "CONCLUSIÓN PROFUNDA" en el texto.
-- Cierre: Termina con una pregunta provocadora para comentarios y pide suscripción.
+- El Hook (0-2s): Empieza con un gancho ultra-impactante basado en el dato más loco de la noticia. No saludes al principio, ve directo al grano.
+- Ritmo: Cambia de imagen o de dirección cada 3-5 segundos.
+- Conclusión Profunda: Antes del cierre, aporta una reflexión filosófica o técnica de alto nivel.
+- Cierre: Una pregunta provocadora para generar comentarios + Call to action.
 
 DATOS DE LA NOTICIA:
 Título: {news_item.title}
@@ -41,15 +44,15 @@ Resumen: {news_item.summary}
 Fuente: {news_item.source.name}
 
 RESPUESTA REQUERIDA (Formato JSON):
-Debes responder con un objeto JSON que tenga tres campos de primer nivel:
-1. "script": El guion completo siguiendo el formato TITULO | imagen.png | Texto
-2. "prompts": Una lista de objetos, donde cada objeto tenga "file" (nombre del archivo sugerido en el guion) y "prompt" (la descripción detallada).
-3. "music_suggestion": Una cadena de texto breve describiendo el estilo de música ideal para este video (ej: "Cinemática épica con toques electrónicos" o "Lo-fi relajante para tutoriales").
+Responde con un objeto JSON con:
+1. "script": El guion en formato TITULO | imagen.png | DIR | Texto (incluyendo etiquetas [PAUSA:X] en líneas nuevas cuando sea dramáticamente necesario).
+2. "prompts": Lista de objetos con "file" y "prompt" (descripción detallada para generar la imagen).
+3. "music_suggestion": Estilo de música ideal.
 
 Responde ÚNICAMENTE el JSON.
 """
 
-    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-flash-latest")
+    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-flash")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
     payload = {
         "contents": [{

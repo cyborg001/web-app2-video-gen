@@ -16,6 +16,8 @@ Este archivo registra la evolución técnica, nuevas funcionalidades y correccio
 | 2.5.0 | 2026-01-01 | **UI Simplification** | Eliminación del checkbox redundante "Activar Desplazamiento Dinámico". Ahora el efecto Ken Burns se activa exclusivamente mediante el guion (`DIR`). |
 | 2.6.0 | 2026-01-01 | **Strategic Scripting** | Aplicación de la **Ley del Gancho** y **Conclusión Profunda** en guiones. Integración de pausas rítmicas para maximizar el Audio Ducking. |
 | 2.8.0 | 2026-01-01 | **Advanced Ken Burns** | Control quirúrgico del encuadre mediante porcentajes (`DIR:START:END`). Permite sub-movimientos precisos en cualquier dirección. |
+| 2.9.0 | 2026-01-01 | **Pro Standalone Sync** | Independización total del repositorio, nuevo README profesional y descripción de alto nivel para GitHub. |
+| 2.9.4 | 2026-01-01 | **AI Scripting Pro** | Actualización del cerebro IA (Gemini) para generar guiones en formato de 4 columnas, con control de Ken Burns y pausas rítmicas automáticas. |
 
 ---
 *Actualizado al 01-01-2026*
