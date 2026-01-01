@@ -52,8 +52,8 @@ Responde con un objeto JSON con:
 Responde ÚNICAMENTE el JSON.
 """
 
-    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-flash")
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-flash-latest")
+    url = f"https://generativelanguage.googleapis.com/v1/models/{model_name}:generateContent?key={api_key}"
     payload = {
         "contents": [{
             "parts": [{"text": prompt}]
@@ -72,9 +72,11 @@ Responde ÚNICAMENTE el JSON.
             data = json.loads(content)
             return data.get('script'), data.get('prompts'), data.get('music_suggestion')
         else:
-            return None, f"Error de API Gemini: {response.status_code} - {response.text}", None
+            human_msg = "Lo siento, hubo un pequeño problema técnico al conectar con la IA de Gemini. He cargado el guion de ejemplo para que puedas seguir trabajando."
+            return None, f"{human_msg} (Código: {response.status_code})", None
     except Exception as e:
-        return None, f"Error durante la generación con IA: {str(e)}", None
+        human_msg = "Vaya, parece que algo falló en la comunicación con la IA. No te preocupes, he activado la plantilla por defecto para no detener tu progreso."
+        return None, f"{human_msg} (Detalle: {str(e)})", None
 
 class ProjectLogger:
     def __init__(self, project):
