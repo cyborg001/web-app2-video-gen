@@ -25,6 +25,7 @@ Este archivo registra la evolución técnica, nuevas funcionalidades y correccio
 | 2.10.0 | 2026-01-01 | **Gemini 2.5 Flash Upgrade** | Migración al modelo `gemini-2.5-flash` (2026) tras diagnóstico exhaustivo de la API. Corrección definitiva del error 404. |
 | 2.10.1 | 2026-01-01 | **Gemini 2.5 Compatibility Fix** | Eliminación de `response_mime_type` no soportado. Parsing robusto de JSON desde respuestas de texto de Gemini 2.5. |
 | 2.10.2 | 2026-01-01 | **Smart Word Counter** | Corrección del timing de actualización del contador de palabras para que funcione correctamente con guiones generados por IA. |
+| 2.10.3 | 2026-01-01 | **UI Label Update** | Actualización del label del editor de guiones para reflejar el formato PRO de 4 columnas con guía rápida. |
 
 ---
 *Actualizado al 01-01-2026*
