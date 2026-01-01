@@ -28,6 +28,11 @@ cursor.png
 cursor_v2.png
 cursor_v3.png
 
+# Legacy and Backups
+AI_Video_Gen_v1/
+Gumroad_Kit/
+AI_Video_Gen_v1.zip
+
 # OS
 .DS_Store
 Thumbs.db
