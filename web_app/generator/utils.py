@@ -302,8 +302,8 @@ def generate_video_process(project):
                 logger.log(f"Pause detected: {pause_duration}s")
                 # Create a silent audio file using MoviePy/Numpy
                 from moviepy import AudioClip
-                # make_frame for mono silence
-                silence = AudioClip(make_frame=lambda t: 0, duration=pause_duration)
+                # moviepy 2.0+ uses positional arg for make_frame or changed signature
+                silence = AudioClip(lambda t: 0, duration=pause_duration)
                 silence.write_audiofile(audio_path, fps=44100, logger=None)
             elif project.engine == 'edge':
                 # Run async in sync context safely
