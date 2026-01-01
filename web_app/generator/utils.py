@@ -358,18 +358,16 @@ def generate_video_process(project):
             real_voice_duration = audio_clip.duration
             duration = real_voice_duration + (0.5 if not is_pause else 0)
                 
-                # Store interval where voice is active for ducking (ONLY if it's not a manual pause)
-                if not is_pause:
-                    voice_intervals.append((current_time, current_time + real_voice_duration))
-                
-                if not hasattr(audio_clip, 'rate') and hasattr(audio_clip, 'fps'):
-                    audio_clip.rate = audio_clip.fps
-                
-                # Update current_time for next section's start
-                current_time += duration
-            except Exception as e:
-                logger.log(f"Error loading audio: {e}")
-                continue
+            # Store interval where voice is active for ducking (ONLY if it's not a manual pause)
+            if not is_pause:
+                voice_intervals.append((current_time, current_time + real_voice_duration))
+            
+            if not hasattr(audio_clip, 'rate') and hasattr(audio_clip, 'fps'):
+                audio_clip.rate = audio_clip.fps
+            
+            # Update current_time for next section's start
+            current_time += duration
+
 
             # Image/Video Asset
             asset_path = section['image']
