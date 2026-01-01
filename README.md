@@ -31,7 +31,7 @@ AI Video Generator Pro es una potente aplicación web diseñada para transformar
 1. **Clonar y Preparar**:
    ```bash
    git clone [TU_URL_DE_GITHUB]
-   cd web_app
+   cd web-app2-video-gen/web_app
    pip install -r requirements.txt
    ```
 
