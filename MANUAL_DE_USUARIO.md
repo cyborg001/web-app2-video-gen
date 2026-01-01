@@ -60,9 +60,11 @@ La aplicación incluye un sistema de mezcla profesional:
 ## ⚙️ Configuración del archivo `.env`
 
 Abre el archivo `.env` para personalizar tu experiencia:
-- **GEMINI_API_KEY**: Cerebro de IA.
-- **ELEVENLABS_API_KEY**: Voces premium.
+- **GEMINI_API_KEY**: Cerebro de IA para guiones e investigación.
+- **ELEVENLABS_API_KEY**: Habilita voces ultra-realistas (opcional).
 - **EDGE_VOICE**: Voz por defecto (Ej: `es-DO-EmilioNeural`).
+- **PORT**: Puerto donde se lanzará la app (Por defecto: `8888`).
+- **MYMEMORY_EMAIL**: Para mejorar la traducción de noticias internacionales.
 
 ---
 

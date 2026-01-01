@@ -41,6 +41,7 @@ AI Video Generator Pro es una potente aplicación web diseñada para transformar
    GEMINI_API_KEY=tu_clave
    ELEVENLABS_API_KEY=tu_clave
    EDGE_VOICE=es-DO-EmilioNeural
+   PORT=8888
    ```
 
 3. **Ejecutar**:
