@@ -72,11 +72,11 @@ Responde ÚNICAMENTE el JSON.
             data = json.loads(content)
             return data.get('script'), data.get('prompts'), data.get('music_suggestion')
         else:
-            human_msg = "Lo siento, hubo un pequeño problema técnico al conectar con la IA de Gemini. He cargado el guion de ejemplo para que puedas seguir trabajando."
-            return None, f"{human_msg} (Código: {response.status_code})", None
+            human_msg = "No se pudo conectar con la IA. Por favor, asegúrate de que tu 'GEMINI_API_KEY' en el archivo '.env' sea válida y que tengas saldo en tu cuenta de Google AI Studio."
+            return None, f"⚠️ {human_msg} (Error {response.status_code})", None
     except Exception as e:
-        human_msg = "Vaya, parece que algo falló en la comunicación con la IA. No te preocupes, he activado la plantilla por defecto para no detener tu progreso."
-        return None, f"{human_msg} (Detalle: {str(e)})", None
+        human_msg = "Parece que hay un problema de conexión o configuración. Revisa que tu internet funcione correctamente y que el nombre del modelo en el archivo '.env' sea el correcto."
+        return None, f"🛑 {human_msg} (Detalle: {str(e)})", None
 
 class ProjectLogger:
     def __init__(self, project):
