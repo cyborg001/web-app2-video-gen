@@ -61,10 +61,26 @@ La aplicación incluye un sistema de mezcla profesional:
 
 Abre el archivo `.env` para personalizar tu experiencia:
 - **GEMINI_API_KEY**: Cerebro de IA para guiones e investigación.
+- **GEMINI_MODEL_NAME**: Especifica el modelo de Gemini a usar. (Por defecto: `gemini-2.5-flash`)
 - **ELEVENLABS_API_KEY**: Habilita voces ultra-realistas (opcional).
 - **EDGE_VOICE**: Voz por defecto (Ej: `es-DO-EmilioNeural`).
 - **PORT**: Puerto donde se lanzará la app (Por defecto: `8888`).
 - **MYMEMORY_EMAIL**: Para mejorar la traducción de noticias internacionales.
+
+Aquí tienes un ejemplo de cómo configurar tu archivo `.env`:
+```env
+GEMINI_API_KEY=tu_api_key_aqui
+GEMINI_MODEL_NAME=gemini-2.5-flash
+ELEVENLABS_API_KEY=tu_api_key_aqui
+EDGE_VOICE=es-DO-EmilioNeural
+PORT=8888
+MYMEMORY_EMAIL=tu_correo@ejemplo.com
+```
+
+> **Modelos de Gemini disponibles (2026)**:
+> - `gemini-2.5-flash` - Recomendado (rápido y preciso)
+> - `gemini-2.5-pro` - Más potente (más lento)
+> - `gemini-2.0-flash-exp-001` - Experimental
 
 ---
 
