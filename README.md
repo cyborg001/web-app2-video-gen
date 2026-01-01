@@ -35,15 +35,20 @@ AI Video Generator Pro es una potente aplicación web diseñada para transformar
    pip install -r requirements.txt
    ```
 
-23. **Configura tus credenciales**: Crea un archivo `.env` en `web_app/` con:
+3. **Configura tus credenciales**: 
+   
+   **Opción 100% GRATUITA** (recomendada para comenzar):
+   ```bash
+   cp .env.example .env
+   # Edita .env y solo coloca tu email en MYMEMORY_EMAIL
+   ```
+   
+   **Opción Premium** (con IA de guiones y voces ultra-realistas):
    ```env
    GEMINI_API_KEY=tu_clave_de_gemini
    GEMINI_MODEL_NAME=gemini-2.5-flash
    ELEVENLABS_API_KEY=tu_clave_de_elevenlabs
-   EDGE_VOICE=es-DO-EmilioNeural
    ```
-   
-   > Modelos de Gemini: `gemini-2.5-flash` (recomendado), `gemini-2.5-pro`, `gemini-2.0-flash-exp-001`
 
 4. **Inicia la aplicación**:
    ```bash
