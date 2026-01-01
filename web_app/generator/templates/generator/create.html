@@ -1,0 +1,177 @@
+{% extends 'generator/base.html' %}
+{% block content %}
+<h1>Crear Nuevo Video</h1>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <label>Título del Proyecto:</label>
+        <input type="text" name="title" required placeholder="Mi Video Genial" value="{{ initial_title }}">
+
+        <label>Motor de Voz:</label>
+        <select name="engine">
+            <option value="edge">Edge TTS (Gratis)</option>
+            <option value="elevenlabs">ElevenLabs (Requiere API Key)</option>
+        </select>
+
+        <label>Formato de Video:</label>
+        <select name="aspect_ratio">
+            <option value="landscape">Horizontal (YouTube 16:9)</option>
+            <option value="portrait">Vertical (YouTube Shorts / TikTok 9:16)</option>
+        </select>
+
+        <label>ID de Voz o Nombre (Opcional):</label>
+        <input type="text" name="voice_id" placeholder="Ej: es-ES-AlvaroNeural o JBFqnCBsd6RMkjVDRZzb">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label>Música de Fondo:</label>
+                <select name="background_music">
+                    <option value="">Sin música</option>
+                    {% for music in music_list %}
+                    <option value="{{ music.id }}">{{ music.name }}</option>
+                    {% endfor %}
+                </select>
+                <p style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">
+                    Gestiona tu música en la sección de <a href="{% url 'generator:music_list' %}"
+                        style="color: #03dac6;">Audio Hub</a>
+                </p>
+            </div>
+            <div>
+                <label>Volumen de Música: <span id="vol-label">15%</span></label>
+                <input type="range" name="music_volume" min="0" max="1" step="0.05" value="0.15"
+                    oninput="document.getElementById('vol-label').innerText = Math.round(this.value * 100) + '%'">
+            </div>
+        </div>
+
+
+        <!-- Selector Visual -->
+        <div
+            style="background: #2d2d2d; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #444;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 1rem;">📁 Selección de Archivos</h3>
+                <button type="button" class="btn" style="background-color: #03dac6; color: #000;"
+                    onclick="browseFile()">
+                    📂 Seleccionar Guion del Disco
+                </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <label style="font-size: 0.8rem; color: #aaa;">Carpeta de Assets (Automática):</label>
+                    <input type="text" name="source_path" id="source_path" placeholder="Esperando selección..." readonly
+                        style="background-color: #222; cursor: not-allowed;">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; color: #aaa;">Archivo de Guion:</label>
+                    <input type="text" name="script_file" id="script_file" placeholder="Esperando selección..." readonly
+                        style="background-color: #222; cursor: not-allowed;">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function browseFile() {
+                fetch("{% url 'generator:browse_script' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.getElementById('source_path').value = data.path;
+                            document.getElementById('script_file').value = data.filename;
+                            document.querySelector('textarea[name="script"]').value = data.content;
+                        } else if (data.status === 'error') {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(err => alert('Error de conexión: ' + err));
+            }
+        </script>
+
+        <label>Guion (Formato: TITULO | imagen.png | Texto):</label>
+
+        <!-- NEW: AI Visual Prompts Section -->
+        {% if ai_visual_prompts %}
+        <div
+            style="background: rgba(3, 218, 198, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px dashed #03dac6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 1rem; color: #03dac6;">✨ Prompts Visuales Sugeridos (Copia para generar
+                    tus imágenes/videos)</h3>
+                <button type="button" class="btn" style="padding: 5px 10px; font-size: 0.8rem;"
+                    onclick="copyPrompts()">Copiar Prompts</button>
+            </div>
+            <textarea id="ai-prompts" name="visual_prompts" rows="6"
+                style="background: rgba(0,0,0,0.2); font-size: 0.85rem; border-color: rgba(3, 218, 198, 0.3);">{{ ai_visual_prompts }}</textarea>
+            <script>
+                function copyPrompts() {
+                    const el = document.getElementById('ai-prompts');
+                    el.select();
+                    document.execCommand('copy');
+                    alert('Prompts copiados al portapapeles');
+                }
+            </script>
+        </div>
+        {% endif %}
+
+        <!-- Script Analytics Bar -->
+        <div id="analytics-bar"
+            style="background: #1e1e1e; padding: 10px; border-radius: 5px 5px 0 0; border: 1px solid #444; border-bottom: none; display: flex; gap: 20px; font-size: 0.9rem;">
+            <span>📝 Palabras: <b id="word-count">0</b></span>
+            <span>⏱️ Duración Est.: <b id="est-duration">0m 0s</b></span>
+        </div>
+
+        <textarea id="script-editor" name="script" rows="15"
+            style="font-family: monospace; border-top-left-radius: 0; border-top-right-radius: 0;">{{ default_script }}</textarea>
+
+        <script>
+            function updateAnalytics() {
+                const text = document.getElementById('script-editor').value;
+                const lines = text.split('\n');
+                let totalWords = 0;
+
+                lines.forEach(line => {
+                    const parts = line.split('|');
+                    if (parts.length === 3) {
+                        const speechText = parts[2].trim();
+                        if (speechText) {
+                            totalWords += speechText.split(/\s+/).filter(w => w.length > 0).length;
+                        }
+                    }
+                });
+
+                document.getElementById('word-count').innerText = totalWords;
+
+                // Estimation: ~140 words per minute
+                const totalSeconds = Math.round((totalWords / 140) * 60);
+                const mins = Math.floor(totalSeconds / 60);
+                const secs = totalSeconds % 60;
+                document.getElementById('est-duration').innerText = `${mins}m ${secs}s`;
+            }
+
+            // Sync with file browser
+            const originalBrowseFile = browseFile;
+            browseFile = function () {
+                fetch("{% url 'generator:browse_script' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.getElementById('source_path').value = data.path;
+                            document.getElementById('script_file').value = data.filename;
+                            document.getElementById('script-editor').value = data.content;
+                            updateAnalytics(); // Update after load
+                        } else if (data.status === 'error') {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(err => alert('Error de conexión: ' + err));
+            };
+
+            // Listen for typing
+            document.getElementById('script-editor').addEventListener('input', updateAnalytics);
+
+            // Initial run
+            window.onload = updateAnalytics;
+        </script>
+
+        <button type="submit" class="btn">Generar Video</button>
+    </form>
+</div>
+{% endblock %}
