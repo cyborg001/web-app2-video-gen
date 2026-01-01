@@ -52,7 +52,7 @@ Responde con un objeto JSON con:
 Responde ÚNICAMENTE el JSON.
 """
 
-    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-1.5-flash-latest")
+    model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-2.5-flash")
     url = f"https://generativelanguage.googleapis.com/v1/models/{model_name}:generateContent?key={api_key}"
     payload = {
         "contents": [{
