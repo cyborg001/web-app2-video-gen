@@ -18,7 +18,8 @@ Este archivo registra la evolución técnica, nuevas funcionalidades y correccio
 | 2.8.0 | 2026-01-01 | **Advanced Ken Burns** | Control quirúrgico del encuadre mediante porcentajes (`DIR:START:END`). Permite sub-movimientos precisos en cualquier dirección. |
 | 2.9.0 | 2026-01-01 | **Pro Standalone Sync** | Independización total del repositorio, nuevo README profesional y descripción de alto nivel para GitHub. |
 | 2.9.4 | 2026-01-01 | **AI Scripting Pro** | Actualización del cerebro IA (Gemini) para generar guiones en formato de 4 columnas, con control de Ken Burns y pausas rítmicas automáticas. |
-| 2.9.5 | 2026-01-01 | **Pause Hotfix** | Corrección de error crítico en `AudioClip` para compatibilidad con MoviePy 2.0, restaurando la funcionalidad de pausas rítmicas. |
+| 2.9.5 | 2026-01-01 | **Pause Hotfix** | Corrección de error crítico en `AudioClip` para compatibilidad con MoviePy 2.0. |
+| 2.9.6 | 2026-01-01 | **Steady Render & Robust Parser** | Generación de silencios en memoria (Stereo) para evitar OSErrors. Limpieza inteligente de nombres de archivo y soporte total para Ken Burns avanzado en el parser. |
 
 ---
 *Actualizado al 01-01-2026*

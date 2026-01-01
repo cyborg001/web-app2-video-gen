@@ -239,7 +239,7 @@ def generate_video_process(project):
                     if os.path.exists(local_path):
                         image_path = local_path
                 
-                # Handling optional DIR parameter: TITULO | IMAGEN | DIR | TEXTO
+                # Improved DIR and Image Parsing
                 direction = None
                 text = ""
                 if len(parts) == 4:
@@ -248,11 +248,28 @@ def generate_video_process(project):
                 else:
                     text = parts[2].strip()
 
+                # Robust direction validation (supports DER:10:50)
+                accepted_direction = None
+                if direction:
+                    base_dir = direction.split(':')[0].strip()
+                    if base_dir in ['DER', 'IZQ', 'ABA', 'ARR']:
+                        accepted_direction = direction
+
+                # Robust image name cleaning (removes :coord if halluciated by IA)
+                if ':' in image_name and not os.path.exists(image_path):
+                    image_name = image_name.split(':')[0].strip()
+                    # Recalculate path with cleaned name
+                    image_path = os.path.join(settings.MEDIA_ROOT, 'assets', image_name)
+                    if project.source_path and os.path.exists(project.source_path):
+                        local_path = os.path.join(project.source_path, image_name)
+                        if os.path.exists(local_path):
+                            image_path = local_path
+
                 sections.append({
                     "title": parts[0].strip(),
                     "image": image_path,
                     "text": text,
-                    "direction": direction if direction in ['DER', 'IZQ', 'ABA', 'ARR'] else None,
+                    "direction": accepted_direction,
                     "original_image_name": image_name 
                 })
         
@@ -300,11 +317,9 @@ def generate_video_process(project):
 
             if is_pause:
                 logger.log(f"Pause detected: {pause_duration}s")
-                # Create a silent audio file using MoviePy/Numpy
                 from moviepy import AudioClip
-                # moviepy 2.0+ uses positional arg for make_frame or changed signature
-                silence = AudioClip(lambda t: 0, duration=pause_duration)
-                silence.write_audiofile(audio_path, fps=44100, logger=None)
+                # Create silent clip directly in memory (Stereo [0,0] for compatibility)
+                audio_clip = AudioClip(lambda t: [0, 0], duration=pause_duration)
             elif project.engine == 'edge':
                 # Run async in sync context safely
                 try:
@@ -329,15 +344,19 @@ def generate_video_process(project):
                 )
                 save(audio_gen, audio_path)
             
-            # Load audio
-            if not os.path.exists(audio_path):
-                 logger.log("Audio not generated. Skipping.")
-                 continue
+            # Load audio for non-pause sections
+            if not is_pause:
+                if not os.path.exists(audio_path):
+                    logger.log("Audio not generated. Skipping.")
+                    continue
+                try:
+                    audio_clip = AudioFileClip(audio_path)
+                except Exception as e:
+                    logger.log(f"Error loading audio: {e}")
+                    continue
 
-            try:
-                audio_clip = AudioFileClip(audio_path)
-                real_voice_duration = audio_clip.duration
-                duration = real_voice_duration + (0.5 if not is_pause else 0)
+            real_voice_duration = audio_clip.duration
+            duration = real_voice_duration + (0.5 if not is_pause else 0)
                 
                 # Store interval where voice is active for ducking (ONLY if it's not a manual pause)
                 if not is_pause:
